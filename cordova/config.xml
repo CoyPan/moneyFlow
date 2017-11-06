@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="example.moneyflow" version="0.1.0">
+  <name>MoneyFlow</name>
+  <description>
+    Example Tabris.js App
+  </description>
+  <author email="pankeyu@baidu.com">
+    pankeyu
+  </author>
+  <preference name="EnableDeveloperConsole" value="$IS_DEBUG" />
+</widget>
