@@ -2,58 +2,6 @@ import { Picker, TextView, Composite } from 'tabris';
 
 import * as Tools from '../tools/tools';
 
-const flowData = {
-    '2017年10月':{
-        '12':[
-            {   // 分类
-                category:'吃',
-                // 备注
-                ext:'火锅',
-                // 金额
-                cost:'100'
-            },{
-                category:'玩',
-                ext:'火锅',
-                cost:'30'
-            },{
-                category:'电影',
-                ext:'火锅',
-                cost:'100'
-            },{
-                category:'吃',
-                ext:'火锅',
-                cost:'100'
-            } 
-        ]
-    },
-    '2017年9月':{
-        '10':[
-            [
-                {   // 分类
-                    category:'吃',
-                    // 备注
-                    ext:'火锅',
-                    // 金额
-                    cost:'100'
-                },{
-                    category:'玩',
-                    ext:'火锅',
-                    cost:'30'
-                },{
-                    category:'电影',
-                    ext:'火锅',
-                    cost:'100'
-                },{
-                    category:'吃',
-                    ext:'火锅',
-                    cost:'100'
-                }      
-            ]
-        ]
-    }
-}
-
-
 class ListBar extends Composite {
 
     monthList: any[]

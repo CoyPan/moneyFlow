@@ -1,6 +1,6 @@
 import {ui, Button, TextView} from 'tabris';
-import List from '../ui/list/list';
-import ListBar from '../ui/list/listBar';
+import flowList from '../ui/list/index';
+
 
 const flowData = {};
 flowData['2017年08月'] = {
@@ -54,9 +54,9 @@ flowData['2017年09月'] = {
 
 let footerOption = {
     uiOption: {
-        left: 0, 
-        top: 0, 
-        right: 0, 
+        left: 0,
+        top: 0,
+        right: 0,
         bottom: 0,
         paging: false
     },
@@ -67,7 +67,7 @@ let footerOption = {
                 src: '/images/list.png',
                 scale: 5
             },
-            tabPage: [new ListBar(flowData),new List({})]
+            tabPage: new flowList().exportUI()
         },
         {
             title: '',
@@ -84,7 +84,7 @@ let footerOption = {
             title: '历史',
             image: {
                 src: '/images/history.png',
-                scale:5
+                scale: 5
             },
             tabPage: new TextView({
                 centerX: 0, centerY: 0,
