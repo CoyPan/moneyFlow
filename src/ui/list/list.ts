@@ -88,7 +88,6 @@ class List extends CollectionView {
   }
 
   createCell = (type: string) => {
-    console.log('createCell', type);
     let cell = new Composite();
     new TextView({
       left: 30, top: '16', right: 30,
@@ -98,7 +97,6 @@ class List extends CollectionView {
   }
 
   updateCell = (cell, index) => {
-    console.log('updateCell');
     let person = people[index];
     cell.apply({
       TextView: { text: person.firstName }
