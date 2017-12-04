@@ -1,6 +1,6 @@
 import { Picker, TextView, Composite } from 'tabris';
 
-import * as Tools from '../tools/tools';
+import * as tools from '../tools/tools';
 
 class ListBar extends Composite {
 
@@ -19,7 +19,7 @@ class ListBar extends Composite {
         this.monthCostList = this.monthList.map((item, idx) => ({
             id: item,
             month: item,
-            totalCost: String(Tools.getMonthCost(this.listData[item]))
+            totalCost: String(tools.getMonthCost(this.listData[item]))
         }));
         
         this.createUI();

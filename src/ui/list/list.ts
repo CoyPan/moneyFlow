@@ -1,4 +1,5 @@
 import { Composite, ImageView, Tab, TabFolder, TextView, CollectionView } from 'tabris';
+import * as tools from '../tools/tools';
 
 let people = [
   ['Holger', 'Staudacher', 'holger.jpg'],
@@ -9,7 +10,7 @@ let people = [
   ['Moritz', 'Post', 'moritz.jpg'],
   ['Ralf', 'Sternberg', 'ralf.jpg'],
   ['Tim', 'Buschtöns', 'tim.jpg']
-].map(([firstName, lastName, image]) => ({firstName, lastName}));
+].map(([firstName, lastName, image]) => ({ firstName, lastName }));
 
 let styles: Object = {
   cellHeight: 100,
@@ -20,37 +21,89 @@ let styles: Object = {
   itemCount: people.length,
 }
 
+let flowData= {};
+flowData['2017年09月'] = {
+  '10': [
+      {   // 分类
+          category: '吃',
+          // 备注
+          ext: '火锅',
+          // 金额
+          cost: '1000'
+      }, {
+          category: '玩',
+          ext: '火锅',
+          cost: '30'
+      }, {
+          category: '电影',
+          ext: '火锅',
+          cost: '100'
+      }, {
+          category: '吃',
+          ext: '火锅',
+          cost: '100'
+      }
+  ]
+}
+
 class List extends CollectionView {
 
-    listData: any
+  listData: any;
+  curMonthData: Object;
+  month: string;
+  listDataForUi: any[];
 
-    constructor(props:any) {
-        super(Object.assign({},styles));
-        this.listData = props;
-        console.log(this.listData);
-    }
+  constructor(props: any) {
+    super(Object.assign({}, styles));
+    this.listData = props;
+    this.month = '2017年09月';
+    this.curMonthData = this.listData[this.month];
+    this.listDataForUi = this.dataAdapter();
+    // console.log(this.listData['2017年09月']);
+  }
 
-    cellType = () => {
-      return 'test';
-    }
-
-    createCell = (type:any) => {
-      console.log('createCell', type);
-      let cell = new Composite();
-      new TextView({
-        left: 30, top: '16', right: 30,
-        alignment: 'center'
-      }).appendTo(cell);
-      return cell;
-    }
-
-    updateCell = (cell, index) => {
-      console.log('updateCell');
-      let person = people[index];
-      cell.apply({
-        TextView: {text: person.firstName}
+  // 格式化数据
+  dataAdapter() {
+    let output: any[] = [];
+    Object.keys(this.curMonthData).forEach((day: string) => {
+      const dayCostList = this.curMonthData[day];
+      const dayCostTotal = tools.getDayCost(dayCostList);
+      output.push({
+        type: 'summary',
+        date: day,
+        cost: dayCostTotal
       });
-    }
+      const newDayCostList = dayCostList.map((dayCostDetail: Object) => {
+        return Object.assign(dayCostDetail, {
+          type: 'detail'
+        });
+      });
+      output = output.concat(newDayCostList);
+    });
+    return output;
+  }
+
+  cellType = (index: number) => {
+    return this.listDataForUi[index].type;
+  }
+
+  createCell = (type: string) => {
+    console.log('createCell', type);
+    let cell = new Composite();
+    new TextView({
+      left: 30, top: '16', right: 30,
+      alignment: 'center'
+    }).appendTo(cell);
+    return cell;
+  }
+
+  updateCell = (cell, index) => {
+    console.log('updateCell');
+    let person = people[index];
+    cell.apply({
+      TextView: { text: person.firstName }
+    });
+  }
 
 }
 

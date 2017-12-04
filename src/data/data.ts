@@ -48,6 +48,28 @@ flowData['2017年09月'] = {
             ext: '火锅',
             cost: '100'
         }
+    ],
+    '11':
+    [
+        {   // 分类
+            category: '吃',
+            // 备注
+            ext: '火锅',
+            // 金额
+            cost: '1000'
+        }, {
+            category: '玩',
+            ext: '火锅',
+            cost: '30'
+        }, {
+            category: '电影',
+            ext: '火锅',
+            cost: '100'
+        }, {
+            category: '吃',
+            ext: '火锅',
+            cost: '100'
+        }
     ]
 }
 
