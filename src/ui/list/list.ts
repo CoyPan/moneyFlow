@@ -1,50 +1,28 @@
 import { Composite, ImageView, Tab, TabFolder, TextView, CollectionView } from 'tabris';
 import * as tools from '../tools/tools';
 
-let people = [
-  ['Holger', 'Staudacher', 'holger.jpg'],
-  ['Ian', 'Bull', 'ian.jpg'],
-  ['Jochen', 'Krause', 'jochen.jpg'],
-  ['Jordi', 'Böhme López', 'jordi.jpg'],
-  ['Markus', 'Knauer', 'markus.jpg'],
-  ['Moritz', 'Post', 'moritz.jpg'],
-  ['Ralf', 'Sternberg', 'ralf.jpg'],
-  ['Tim', 'Buschtöns', 'tim.jpg']
-].map(([firstName, lastName, image]) => ({ firstName, lastName }));
 
-let styles: Object = {
-  cellHeight: 100,
+interface summaryData {
+  type: string;
+  date: string;
+  cost: string;
+}
+
+interface detailData {
+  type: string;
+  category: string;
+  ext: string;
+  cost: string;
+}
+
+// 基本的样式
+const styles: Object = {
   left: 0,
   top: 50,
   right: 0,
-  bottom: 0,
-  itemCount: people.length,
+  bottom: 0
 }
 
-let flowData= {};
-flowData['2017年09月'] = {
-  '10': [
-      {   // 分类
-          category: '吃',
-          // 备注
-          ext: '火锅',
-          // 金额
-          cost: '1000'
-      }, {
-          category: '玩',
-          ext: '火锅',
-          cost: '30'
-      }, {
-          category: '电影',
-          ext: '火锅',
-          cost: '100'
-      }, {
-          category: '吃',
-          ext: '火锅',
-          cost: '100'
-      }
-  ]
-}
 
 class List extends CollectionView {
 
@@ -54,23 +32,23 @@ class List extends CollectionView {
   listDataForUi: any[];
 
   constructor(props: any) {
-    super(Object.assign({}, styles));
+    super(Object.assign({ id: 'flowList' }, styles));
     this.listData = props;
     this.month = '2017年09月';
     this.curMonthData = this.listData[this.month];
     this.listDataForUi = this.dataAdapter();
-    // console.log(this.listData['2017年09月']);
+    this.itemCount = this.listDataForUi.length;
   }
 
   // 格式化数据
-  dataAdapter() {
+  dataAdapter(): any[] {
     let output: any[] = [];
     Object.keys(this.curMonthData).forEach((day: string) => {
       const dayCostList = this.curMonthData[day];
       const dayCostTotal = tools.getDayCost(dayCostList);
       output.push({
         type: 'summary',
-        date: day,
+        date: this.month + day + '日',
         cost: dayCostTotal
       });
       const newDayCostList = dayCostList.map((dayCostDetail: Object) => {
@@ -83,34 +61,55 @@ class List extends CollectionView {
     return output;
   }
 
-  cellType = (index: number) => {
+  cellType = (index: number):string => {
     return this.listDataForUi[index].type;
   }
 
   createCell = (type: string) => {
-    let cell = new Composite();
-    new TextView({
-      left: 30, top: '16', right: 30,
-      alignment: 'center'
-    }).appendTo(cell);
-    return cell;
+      return new Cell(type);
   }
 
   updateCell = (cell, index) => {
-    let person = people[index];
+    const data = this.listDataForUi[index];
+    const text = data.type === 'summary' ? Cell.getSummaryText(data) : Cell.getDetailText(data)
     cell.apply({
-      TextView: { text: person.firstName }
+      '.cell': { text: text }
     });
   }
-
 }
 
-class summaryCell extends Composite {
 
-}
+class Cell extends Composite {
 
-class detailCell extends Composite {
+  constructor(type: string) {
+    super();
+    this.createUI(type);
+  }
 
+  static getSummaryText(summaryData: summaryData) {
+    return summaryData.date + '  总计消费:' + summaryData.cost + '元';
+  }
+
+  static getDetailText(detailData: detailData) {
+    return '【' + detailData.category + '】' + detailData.ext + ' ' + detailData.cost + '元';
+  }
+
+  createUI(type: string) {
+    if (type === 'summary') {
+      this.append(new TextView({
+        class: 'cell',
+        left: 30, top: '16', right: 30, height: 40,
+        alignment: 'right', background: 'gray'
+      }));
+    }
+    else if (type === 'detail') {
+      this.append(new TextView({
+        class: 'cell',
+        left: 30, top: '16', right: 30,
+        alignment: 'right'
+      }));
+    }
+  }
 }
 
 export default List;
